@@ -5,10 +5,12 @@ import 'generated/glyph-definitions.dart';
 const Map<Clefs, Glyph> clefToGlyphMap = {
   Clefs.G: Glyph.gClef,
   Clefs.F: Glyph.fClef,
+  Clefs.C: Glyph.cClef,
 };
 
 const Map<Clefs, int> clefToPositionOffsetMap = {
   Clefs.G: 1,
+  Clefs.C: 0,
   Clefs.F: -1,
 };
 

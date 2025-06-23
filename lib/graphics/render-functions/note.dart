@@ -33,18 +33,18 @@ paintLedgers(
       }
     case Clefs.F:
       {
-        if (note.positionalValue >
-            topStaffLineNoteFClef.positionalValue + 1) {
-          numLedgersToDraw = ((note.positionalValue -
-                      topStaffLineNoteFClef.positionalValue) /
-                  2)
-              .floor();
-        } else if (note.positionalValue <
-            bottomStaffLineNoteFClef.positionalValue - 1) {
-          numLedgersToDraw = ((note.positionalValue -
-                      bottomStaffLineNoteFClef.positionalValue) /
-                  2)
-              .ceil();
+        if (note.positionalValue > topStaffLineNoteFClef.positionalValue + 1) {
+          numLedgersToDraw = ((note.positionalValue - topStaffLineNoteFClef.positionalValue) / 2).floor();
+        } else if (note.positionalValue < bottomStaffLineNoteFClef.positionalValue - 1) {
+          numLedgersToDraw = ((note.positionalValue - bottomStaffLineNoteFClef.positionalValue) / 2).ceil();
+        }
+      }
+    case Clefs.C:
+      {
+        if (note.positionalValue > topStaffLineNoteCClef.positionalValue + 1) {
+          numLedgersToDraw = ((note.positionalValue - topStaffLineNoteCClef.positionalValue) / 2).floor();
+        } else if (note.positionalValue < bottomStaffLineNoteCClef.positionalValue - 1) {
+          numLedgersToDraw = ((note.positionalValue - bottomStaffLineNoteCClef.positionalValue) / 2).ceil();
         }
       }
   }
@@ -344,14 +344,14 @@ PitchNoteRenderMeasurements calculateNoteWidth(
   );
 }
 
-const stdNotePositionGClef =
-    NotePosition(tone: BaseTones.B, octave: 2, length: NoteLength.quarter);
-const stdNotePositionFClef =
-    NotePosition(tone: BaseTones.D, octave: 1, length: NoteLength.quarter);
+const stdNotePositionGClef = NotePosition(tone: BaseTones.B, octave: 2, length: NoteLength.quarter);
+const stdNotePositionFClef = NotePosition(tone: BaseTones.D, octave: 1, length: NoteLength.quarter);
+const stdNotePositionCClef = NotePosition(tone: BaseTones.C, octave: 2, length: NoteLength.quarter);
 
 const Map<Clefs, NotePosition> stdNotePosition = {
   Clefs.G: stdNotePositionGClef,
   Clefs.F: stdNotePositionFClef,
+  Clefs.C: stdNotePositionCClef,
 };
 
 const topStaffLineNoteGClef =
@@ -367,11 +367,13 @@ const bottomStaffLineNoteFClef =
 const Map<Clefs, NotePosition> topStaffLineNote = {
   Clefs.G: topStaffLineNoteGClef,
   Clefs.F: topStaffLineNoteFClef,
+  Clefs.C: topStaffLineNoteCClef,
 };
 
 const Map<Clefs, NotePosition> bottomStaffLineNote = {
   Clefs.G: bottomStaffLineNoteGClef,
   Clefs.F: bottomStaffLineNoteFClef,
+  Clefs.C: bottomStaffLineNoteCClef,
 };
 
 int calculateYOffsetForNote(Clefs clef, int positionalValue) {
@@ -380,6 +382,8 @@ int calculateYOffsetForNote(Clefs clef, int positionalValue) {
     diff = stdNotePositionGClef.positionalValue - positionalValue;
   } else if (clef == Clefs.F) {
     diff = stdNotePositionFClef.positionalValue - positionalValue;
+  } else if (clef == Clefs.C) {
+    diff = stdNotePositionCClef.positionalValue - positionalValue;
   }
   return diff;
 }

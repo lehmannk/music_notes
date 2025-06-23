@@ -71,7 +71,7 @@ class Words extends DirectionType {
   final FontWeight? fontWeight;
 }
 
-enum Clefs { G, F }
+enum Clefs { G, F, C }
 
 /// The tones, that can be put on a stave without accidentals
 enum BaseTones { C, D, E, F, G, A, B }
