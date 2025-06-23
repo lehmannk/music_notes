@@ -264,7 +264,7 @@ paintMeasureAttributes(Attributes attributes, DrawingContext drawC) {
       }
     }
 
-    if(attributes.time != null) {
+    if (attributes.time != null && attributes.time!.draw) {
       Rect? timesBB;
       sortedClefs.forEachIndexed((index, clef) {
         drawC.canvas.translate(0, staffYPos(drawC, clef.staffNumber));

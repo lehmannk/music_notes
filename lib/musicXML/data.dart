@@ -123,9 +123,10 @@ class Attributes extends MeasureContent {
 }
 
 class Time {
-  Time(this.beats, this.beatType);
+  Time(this.beats, this.beatType, {this.draw = true});
   final int beats;
   final int beatType;
+  final bool draw;
 }
 
 class Clef {
