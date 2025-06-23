@@ -105,8 +105,8 @@ paintMeasure(Measure measure, DrawingContext drawC) {
   final measureRect = Rect.fromPoints(measureRectLT, measureRectRB);
   final measureGeom = MeasureGeometry(measureRect, stavesBounds);
   measureGeom.attributesGeometry = attributesGeom;
-  if(attributesGeom != null) {
-    drawC.debugDrawBB(attributesGeom!.boundingBox);
+  if (attributesGeom != null) {
+    // drawC.debugDrawBB(attributesGeom!.boundingBox);
   }
   drawC.measuresPerPart[drawC.currentPart].add(measureGeom);
 }
