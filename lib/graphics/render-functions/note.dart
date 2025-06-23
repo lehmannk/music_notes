@@ -107,6 +107,7 @@ paintPitchNote(DrawingContext drawC, PitchNote note, {bool noAdvance = false}) {
     noteGlyph,
     yOffset: (lS / 2) * offset,
     noAdvance: true,
+    color: note.color,
   );
 
   if (note.beams.isNotEmpty) {

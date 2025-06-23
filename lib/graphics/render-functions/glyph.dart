@@ -6,7 +6,8 @@ import '../generated/glyph-definitions.dart';
 import 'DrawingContext.dart';
 
 /// Advances the width of the glyph
-GlyphGeometry paintGlyph(DrawingContext drawC, Glyph glyph, {double yOffset = 0, bool noAdvance = false}) {
+GlyphGeometry paintGlyph(DrawingContext drawC, Glyph glyph,
+    {double yOffset = 0, bool noAdvance = false, color = Colors.black}) {
   final lS = drawC.lS;
   final textPainter = TextPainter(
     text: TextSpan(
@@ -15,7 +16,7 @@ GlyphGeometry paintGlyph(DrawingContext drawC, Glyph glyph, {double yOffset = 0,
         fontFamily: 'Bravura',
         fontSize: drawC.staffHeight,
         height: 1,
-        color: Colors.black,
+        color: color,
       ),
     ),
     textDirection: TextDirection.ltr,

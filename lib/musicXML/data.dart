@@ -192,35 +192,48 @@ class MusicalKey {
   final KeyMode? mode;
 }
 
-class Note extends MeasureContent {
+abstract class Note extends MeasureContent {
   Note(this.duration, this.voice, this.staff, this.notations);
   final int duration;
   final int voice;
-  final int staff;
+  int staff;
   final List<Notation> notations;
+
+  NotePosition get notePosition;
 }
 
 class RestNote extends Note {
   RestNote(super.duration, super.voice, super.staff, super.notations);
+
+  // TODO(Kai): these are just default values yet
+  @override
+  NotePosition get notePosition => const NotePosition(
+        tone: BaseTones.C,
+        length: NoteLength.quarter,
+        octave: 0,
+        accidental: Accidentals.none,
+      );
 }
 
 class PitchNote extends Note {
-  PitchNote(super.duration, super.voice, super.staff, super.notations,
-      this.pitch, this.type, this.stem, this.beams,
-      {this.dots = 0, this.chord = false});
-  final Pitch pitch;
+  PitchNote(super.duration, super.voice, super.staff, super.notations, this.pitch, this.type, this.stem, this.beams,
+      {this.dots = 0, this.chord = false, this.color = Colors.black});
   final NoteLength type;
   final StemValue stem;
   final List<Beam> beams;
   final int dots;
   final bool chord;
+  Pitch pitch;
+  StemValue stem;
+  Color color;
 
+  @override
   NotePosition get notePosition => NotePosition(
-      tone: pitch.step,
-      length: type,
-      octave: pitch.octave,
-      accidental: pitch.accidental,
-  );
+        tone: pitch.step,
+        length: type,
+        octave: pitch.octave,
+        accidental: pitch.accidental,
+      );
 }
 
 abstract class Notation {
