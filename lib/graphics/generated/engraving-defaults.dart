@@ -1,8 +1,12 @@
 class EngravingDefaults {
-
   const EngravingDefaults();
 
-  final List<String> textFontFamily = const ["Academico", "Century Schoolbook", "Edwin", "serif"];
+  final List<String> textFontFamily = const [
+    "Academico",
+    "Century Schoolbook",
+    "Edwin",
+    "serif"
+  ];
   final double staffLineThickness = 0.13;
   final double stemThickness = 0.12;
   final double beamThickness = 0.5;

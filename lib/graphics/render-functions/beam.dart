@@ -18,8 +18,8 @@ List<int> getOpenBeams(Map<int, List<BeamPoint>> beamPoints) {
   final List<int> beginList = [];
   final List<int> endOrHookList = [];
 
-  for(final beamPointsForNumber in beamPoints.values) {
-    for(final elmt in beamPointsForNumber) {
+  for (final beamPointsForNumber in beamPoints.values) {
+    for (final elmt in beamPointsForNumber) {
       switch (elmt.beam.value) {
         case BeamValue.backward:
         case BeamValue.forward:
@@ -35,7 +35,9 @@ List<int> getOpenBeams(Map<int, List<BeamPoint>> beamPoints) {
     }
   }
 
-  return beginList.whereNot((element) => endOrHookList.contains(element)).toList(growable: false);
+  return beginList
+      .whereNot((element) => endOrHookList.contains(element))
+      .toList(growable: false);
 }
 
 paintBeam(DrawingContext drawC, Offset start, Offset end) {
@@ -47,8 +49,8 @@ paintBeam(DrawingContext drawC, Offset start, Offset end) {
   final Path path = Path();
   path.moveTo(start.dx, start.dy);
   path.lineTo(end.dx, end.dy);
-  path.lineTo(end.dx, end.dy + drawC.lS*ENGRAVING_DEFAULTS.beamThickness);
-  path.lineTo(start.dx, start.dy + drawC.lS*ENGRAVING_DEFAULTS.beamThickness);
+  path.lineTo(end.dx, end.dy + drawC.lS * ENGRAVING_DEFAULTS.beamThickness);
+  path.lineTo(start.dx, start.dy + drawC.lS * ENGRAVING_DEFAULTS.beamThickness);
   path.close();
 
   drawC.canvas.drawPath(path, paint);
@@ -57,7 +59,7 @@ paintBeam(DrawingContext drawC, Offset start, Offset end) {
 paintStem(DrawingContext drawC, Offset start, Offset end) {
   final Paint paint = Paint();
   paint.color = Colors.black;
-  paint.strokeWidth = ENGRAVING_DEFAULTS.stemThickness*drawC.lS;
+  paint.strokeWidth = ENGRAVING_DEFAULTS.stemThickness * drawC.lS;
 
   drawC.canvas.drawLine(start, end, paint);
 }

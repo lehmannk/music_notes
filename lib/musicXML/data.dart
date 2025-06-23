@@ -1,6 +1,6 @@
-import 'dart:ui';
-import '../graphics/notes.dart';
+import 'package:flutter/material.dart';
 
+import '../graphics/notes.dart';
 import '../graphics/render-functions/staff.dart';
 
 class Score {
@@ -22,6 +22,7 @@ class Measure {
     final attributes = contents.whereType<Attributes>();
     return attributes.isNotEmpty ? attributes.first : null;
   }
+
   Barline get barline {
     final barline = contents.whereType<Barline>();
     return barline.isNotEmpty ? barline.first : Barline(BarLineTypes.regular);
@@ -149,6 +150,7 @@ enum KeyMode {
 }
 
 typedef Fifths = int;
+
 enum CircleOfFifths {
   C_A,
   G_E,
@@ -164,6 +166,7 @@ enum CircleOfFifths {
   Bflat_G,
   F_D
 }
+
 const Map<CircleOfFifths, Fifths> _fifthsToIntMap = {
   CircleOfFifths.C_A: 0,
   CircleOfFifths.G_E: 1,
@@ -216,10 +219,10 @@ class RestNote extends Note {
 }
 
 class PitchNote extends Note {
-  PitchNote(super.duration, super.voice, super.staff, super.notations, this.pitch, this.type, this.stem, this.beams,
+  PitchNote(super.duration, super.voice, super.staff, super.notations,
+      this.pitch, this.type, this.stem, this.beams,
       {this.dots = 0, this.chord = false, this.color = Colors.black});
   final NoteLength type;
-  final StemValue stem;
   final List<Beam> beams;
   final int dots;
   final bool chord;
@@ -332,6 +335,18 @@ class Pitch {
       : (alter == -1
           ? Accidentals.flat
           : (alter == 1 ? Accidentals.sharp : Accidentals.none));
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Pitch &&
+        step == other.step &&
+        octave == other.octave &&
+        alter == other.alter;
+  }
+
+  @override
+  int get hashCode => Object.hash(step, octave, alter);
 }
 
 class Backup extends MeasureContent {

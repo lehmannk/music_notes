@@ -31,38 +31,41 @@ Part parsePartXML(XmlElement partXML) {
 
 Measure parseMeasureXML(XmlElement measureXML) {
   final childElements = measureXML.children.whereType<XmlElement>();
-  final List<MeasureContent> contents = childElements.map((child) {
-    switch (child.name.qualified) {
-      case 'attributes':
-        {
-          return parseAttributesXML(child);
+  final List<MeasureContent> contents = childElements
+      .map((child) {
+        switch (child.name.qualified) {
+          case 'attributes':
+            {
+              return parseAttributesXML(child);
+            }
+          case 'barline':
+            {
+              return parseBarlineXML(child);
+            }
+          case 'direction':
+            {
+              return parseDirectionXML(child);
+            }
+          case 'note':
+            {
+              return parseNoteXML(child);
+            }
+          case 'backup':
+            {
+              return parseBackupXML(child);
+            }
+          case 'forward':
+            {
+              return parseForwardXML(child);
+            }
+          default:
+            {
+              return null;
+            }
         }
-      case 'barline':
-        {
-          return parseBarlineXML(child);
-        }
-      case 'direction':
-        {
-          return parseDirectionXML(child);
-        }
-      case 'note':
-        {
-          return parseNoteXML(child);
-        }
-      case 'backup':
-        {
-          return parseBackupXML(child);
-        }
-      case 'forward':
-        {
-          return parseForwardXML(child);
-        }
-      default:
-        {
-          return null;
-        }
-    }
-  }).whereType<MeasureContent>().toList();
+      })
+      .whereType<MeasureContent>()
+      .toList();
 
   return Measure(contents);
 }
@@ -98,21 +101,25 @@ Attributes? parseAttributesXML(XmlElement attributesXML) {
   final clefElmts = attributesXML.findAllElements('clef');
   List<Clef>? clefs;
   if (clefElmts.isNotEmpty) {
-    clefs = clefElmts.map((clefElmt) {
-      final signElmt = clefElmt.getElement('sign');
-      final String? signString = signElmt?.innerText;
-      final Clefs? sign = signString != null
-          ? Clefs.values.firstWhere((e) => e.toString() == 'Clefs.$signString')
-          : null;
+    clefs = clefElmts
+        .map((clefElmt) {
+          final signElmt = clefElmt.getElement('sign');
+          final String? signString = signElmt?.innerText;
+          final Clefs? sign = signString != null
+              ? Clefs.values
+                  .firstWhere((e) => e.toString() == 'Clefs.$signString')
+              : null;
 
-      final int number = int.parse(clefElmt.getAttribute('number') ?? '1');
+          final int number = int.parse(clefElmt.getAttribute('number') ?? '1');
 
-      if (sign != null) {
-        return Clef(number, sign);
-      } else {
-        return null;
-      }
-    }).whereType<Clef>().toList();
+          if (sign != null) {
+            return Clef(number, sign);
+          } else {
+            return null;
+          }
+        })
+        .whereType<Clef>()
+        .toList();
   }
 
   if ((staves ?? 0) != (clefs != null ? clefs.length : 0)) {
@@ -190,8 +197,7 @@ Direction? parseDirectionXML(XmlElement directionXML) {
       break;
     case null:
       {
-        throw AssertionError(
-            'direction-type element missing in direction.');
+        throw AssertionError('direction-type element missing in direction.');
       }
     default:
       {
@@ -347,7 +353,8 @@ Note? parseNoteXML(XmlElement noteXML) {
   final beams = beamElmts.map(parseBeamXML).whereType<Beam>().toList();
 
   final notationElmts = noteXML.findAllElements('notation');
-  final notations = notationElmts.map(parseNotationXML).expand((e) => e).toList();
+  final notations =
+      notationElmts.map(parseNotationXML).expand((e) => e).toList();
 
   final dots = noteXML.findAllElements('dot').length;
 
@@ -396,19 +403,25 @@ int beamStructsOpen = 0;
 Beam? parseBeamXML(XmlElement beamXML) {
   final String valueString = beamXML.innerText;
   final BeamValue? value = valueString != null
-      ? BeamValue.values
-          .firstWhere((e) => e.toString() == 'BeamValue.continued' ? valueString == 'continue' : e.toString() == 'BeamValue.$valueString')
+      ? BeamValue.values.firstWhere((e) => e.toString() == 'BeamValue.continued'
+          ? valueString == 'continue'
+          : e.toString() == 'BeamValue.$valueString')
       : null;
-  if(value == BeamValue.begin) {
+  if (value == BeamValue.begin) {
     beamStructsOpen++;
-  } else if(value == BeamValue.end) {
+  } else if (value == BeamValue.end) {
     beamStructsOpen--;
   }
 
   final int number = int.parse(beamXML.getAttribute('number') ?? '1');
 
   if (value != null) {
-    return Beam(beamStructsOpen > 0 || value == BeamValue.forward ? currentBeamId : currentBeamId++, number, value);
+    return Beam(
+        beamStructsOpen > 0 || value == BeamValue.forward
+            ? currentBeamId
+            : currentBeamId++,
+        number,
+        value);
   } else {
     return null;
   }

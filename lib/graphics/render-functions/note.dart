@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../musicXML/data.dart';
 import '../generated/engraving-defaults.dart';
 import '../generated/glyph-advance-widths.dart';
@@ -16,12 +17,11 @@ paintLedgers(
   switch (staff) {
     case Clefs.G:
       {
-        if (note.positionalValue >
-            topStaffLineNoteGClef.positionalValue + 1) {
-          numLedgersToDraw = ((note.positionalValue -
-                      topStaffLineNoteGClef.positionalValue) /
-                  2)
-              .floor();
+        if (note.positionalValue > topStaffLineNoteGClef.positionalValue + 1) {
+          numLedgersToDraw =
+              ((note.positionalValue - topStaffLineNoteGClef.positionalValue) /
+                      2)
+                  .floor();
         } else if (note.positionalValue <
             bottomStaffLineNoteGClef.positionalValue - 1) {
           numLedgersToDraw = ((note.positionalValue -
@@ -34,17 +34,31 @@ paintLedgers(
     case Clefs.F:
       {
         if (note.positionalValue > topStaffLineNoteFClef.positionalValue + 1) {
-          numLedgersToDraw = ((note.positionalValue - topStaffLineNoteFClef.positionalValue) / 2).floor();
-        } else if (note.positionalValue < bottomStaffLineNoteFClef.positionalValue - 1) {
-          numLedgersToDraw = ((note.positionalValue - bottomStaffLineNoteFClef.positionalValue) / 2).ceil();
+          numLedgersToDraw =
+              ((note.positionalValue - topStaffLineNoteFClef.positionalValue) /
+                      2)
+                  .floor();
+        } else if (note.positionalValue <
+            bottomStaffLineNoteFClef.positionalValue - 1) {
+          numLedgersToDraw = ((note.positionalValue -
+                      bottomStaffLineNoteFClef.positionalValue) /
+                  2)
+              .ceil();
         }
       }
     case Clefs.C:
       {
         if (note.positionalValue > topStaffLineNoteCClef.positionalValue + 1) {
-          numLedgersToDraw = ((note.positionalValue - topStaffLineNoteCClef.positionalValue) / 2).floor();
-        } else if (note.positionalValue < bottomStaffLineNoteCClef.positionalValue - 1) {
-          numLedgersToDraw = ((note.positionalValue - bottomStaffLineNoteCClef.positionalValue) / 2).ceil();
+          numLedgersToDraw =
+              ((note.positionalValue - topStaffLineNoteCClef.positionalValue) /
+                      2)
+                  .floor();
+        } else if (note.positionalValue <
+            bottomStaffLineNoteCClef.positionalValue - 1) {
+          numLedgersToDraw = ((note.positionalValue -
+                      bottomStaffLineNoteCClef.positionalValue) /
+                  2)
+              .ceil();
         }
       }
   }
@@ -74,7 +88,7 @@ class PitchNoteRenderMeasurements {
   PitchNoteRenderMeasurements(this.boundingBox, this.noteAnchors);
 
   final Rect boundingBox;
-  final GlyphAnchor ?noteAnchors;
+  final GlyphAnchor? noteAnchors;
 }
 
 paintPitchNote(DrawingContext drawC, PitchNote note, {bool noAdvance = false}) {
@@ -138,40 +152,45 @@ paintPitchNote(DrawingContext drawC, PitchNote note, {bool noAdvance = false}) {
     final openBeams = getOpenBeams(currentBeamPointMapForThisId);
 
     if (openBeams.isEmpty) {
-      for(final beamPoints in currentBeamPointMapForThisId.entries) {
+      for (final beamPoints in currentBeamPointMapForThisId.entries) {
         final BeamPoint start = beamPoints.value.first;
         final BeamPoint end = beamPoints.value.last;
 
-        final double stemLength = lS*2 + beamPoints.key * (ENGRAVING_DEFAULTS.beamThickness*lS + ENGRAVING_DEFAULTS.beamSpacing*lS);
+        final double stemLength = lS * 2 +
+            beamPoints.key *
+                (ENGRAVING_DEFAULTS.beamThickness * lS +
+                    ENGRAVING_DEFAULTS.beamSpacing * lS);
 
         Offset startOffset, endOffset;
         if (start.drawAbove) {
           startOffset = drawC.canvas.globalToLocal(Offset(
             start.notePosition.dx + start.noteAnchor.stemUpSE.dx * lS,
             start.notePosition.dy +
-                (drawC.staffHeight/2) -
-                stemLength - (ENGRAVING_DEFAULTS.beamThickness*lS) +
+                (drawC.staffHeight / 2) -
+                stemLength -
+                (ENGRAVING_DEFAULTS.beamThickness * lS) +
                 start.noteAnchor.stemUpSE.dy * lS,
           ));
           endOffset = drawC.canvas.globalToLocal(Offset(
             end.notePosition.dx + end.noteAnchor.stemUpSE.dx * lS,
             end.notePosition.dy +
-                (drawC.staffHeight/2) -
-                stemLength - (ENGRAVING_DEFAULTS.beamThickness*lS) +
+                (drawC.staffHeight / 2) -
+                stemLength -
+                (ENGRAVING_DEFAULTS.beamThickness * lS) +
                 end.noteAnchor.stemUpSE.dy * lS,
           ));
         } else {
           startOffset = drawC.canvas.globalToLocal(Offset(
             start.notePosition.dx + start.noteAnchor.stemDownNW.dx * lS,
             start.notePosition.dy +
-                (drawC.staffHeight/2) +
+                (drawC.staffHeight / 2) +
                 stemLength +
                 start.noteAnchor.stemDownNW.dy * lS,
           ));
           endOffset = drawC.canvas.globalToLocal(Offset(
             end.notePosition.dx + end.noteAnchor.stemDownNW.dx * lS,
             end.notePosition.dy +
-                (drawC.staffHeight/2) +
+                (drawC.staffHeight / 2) +
                 stemLength +
                 end.noteAnchor.stemDownNW.dy * lS,
           ));
@@ -179,21 +198,25 @@ paintPitchNote(DrawingContext drawC, PitchNote note, {bool noAdvance = false}) {
 
         paintBeam(drawC, startOffset, endOffset);
 
-        for(final beamPoint in beamPoints.value) {
+        for (final beamPoint in beamPoints.value) {
           Offset stemOffsetStart, stemOffsetEnd;
-          if(beamPoint.drawAbove) {
+          if (beamPoint.drawAbove) {
             stemOffsetStart = drawC.canvas.globalToLocal(Offset(
               beamPoint.notePosition.dx + beamPoint.noteAnchor.stemUpSE.dx * lS,
               beamPoint.notePosition.dy +
-                  (drawC.staffHeight/2) +
+                  (drawC.staffHeight / 2) +
                   beamPoint.noteAnchor.stemUpSE.dy * lS,
             ));
 
             final startOffsetGlobal = drawC.canvas.localToGlobal(startOffset);
             final endOffsetGlobal = drawC.canvas.localToGlobal(endOffset);
 
-            double stemOffsetYEnd = ((beamPoint.notePosition.dx + beamPoint.noteAnchor.stemUpSE.dx * lS) - startOffsetGlobal.dx) *
-                ((endOffsetGlobal.dy - startOffsetGlobal.dy) / (endOffsetGlobal.dx - startOffsetGlobal.dx)) + startOffsetGlobal.dy;
+            double stemOffsetYEnd = ((beamPoint.notePosition.dx +
+                            beamPoint.noteAnchor.stemUpSE.dx * lS) -
+                        startOffsetGlobal.dx) *
+                    ((endOffsetGlobal.dy - startOffsetGlobal.dy) /
+                        (endOffsetGlobal.dx - startOffsetGlobal.dx)) +
+                startOffsetGlobal.dy;
 
             stemOffsetEnd = drawC.canvas.globalToLocal(Offset(
               beamPoint.notePosition.dx + beamPoint.noteAnchor.stemUpSE.dx * lS,
@@ -201,22 +224,27 @@ paintPitchNote(DrawingContext drawC, PitchNote note, {bool noAdvance = false}) {
             ));
           } else {
             stemOffsetStart = drawC.canvas.globalToLocal(Offset(
-              beamPoint.notePosition.dx + beamPoint.noteAnchor.stemDownNW.dx * lS,
+              beamPoint.notePosition.dx +
+                  beamPoint.noteAnchor.stemDownNW.dx * lS,
               beamPoint.notePosition.dy +
-                  (drawC.staffHeight/2) +
+                  (drawC.staffHeight / 2) +
                   beamPoint.noteAnchor.stemDownNW.dy * lS,
             ));
 
             final startOffsetGlobal = drawC.canvas.localToGlobal(startOffset);
             final endOffsetGlobal = drawC.canvas.localToGlobal(endOffset);
 
-            double stemOffsetYEnd = ((beamPoint.notePosition.dx + beamPoint.noteAnchor.stemDownNW.dx * lS) - startOffsetGlobal.dx) *
-                ((endOffsetGlobal.dy - startOffsetGlobal.dy) / (endOffsetGlobal.dx - startOffsetGlobal.dx)) +
+            double stemOffsetYEnd = ((beamPoint.notePosition.dx +
+                            beamPoint.noteAnchor.stemDownNW.dx * lS) -
+                        startOffsetGlobal.dx) *
+                    ((endOffsetGlobal.dy - startOffsetGlobal.dy) /
+                        (endOffsetGlobal.dx - startOffsetGlobal.dx)) +
                 startOffsetGlobal.dy +
-                ENGRAVING_DEFAULTS.beamThickness*lS;
+                ENGRAVING_DEFAULTS.beamThickness * lS;
 
             stemOffsetEnd = drawC.canvas.globalToLocal(Offset(
-              beamPoint.notePosition.dx + beamPoint.noteAnchor.stemDownNW.dx * lS,
+              beamPoint.notePosition.dx +
+                  beamPoint.noteAnchor.stemDownNW.dx * lS,
               stemOffsetYEnd,
             ));
           }
@@ -248,6 +276,7 @@ paintPitchNote(DrawingContext drawC, PitchNote note, {bool noAdvance = false}) {
       yOffset: (lS / 2) *
           calculateYOffsetForNote(staff, notePosition.positionalValue),
       noAdvance: true,
+      color: note.color,
     );
   }
 
@@ -341,13 +370,19 @@ PitchNoteRenderMeasurements calculateNoteWidth(
 
   return PitchNoteRenderMeasurements(
     Rect.fromLTRB(leftBorder, topBorder, rightBorder, bottomBorder),
-    !drawBeamedNote ? GLYPH_ANCHORS[noteGlyph]!.translate(Offset(0, (lineSpacing / 2) * offset)) : null,
+    !drawBeamedNote
+        ? GLYPH_ANCHORS[noteGlyph]!
+            .translate(Offset(0, (lineSpacing / 2) * offset))
+        : null,
   );
 }
 
-const stdNotePositionGClef = NotePosition(tone: BaseTones.B, octave: 2, length: NoteLength.quarter);
-const stdNotePositionFClef = NotePosition(tone: BaseTones.D, octave: 1, length: NoteLength.quarter);
-const stdNotePositionCClef = NotePosition(tone: BaseTones.C, octave: 2, length: NoteLength.quarter);
+const stdNotePositionGClef =
+    NotePosition(tone: BaseTones.B, octave: 2, length: NoteLength.quarter);
+const stdNotePositionFClef =
+    NotePosition(tone: BaseTones.D, octave: 1, length: NoteLength.quarter);
+const stdNotePositionCClef =
+    NotePosition(tone: BaseTones.C, octave: 2, length: NoteLength.quarter);
 
 const Map<Clefs, NotePosition> stdNotePosition = {
   Clefs.G: stdNotePositionGClef,
@@ -364,6 +399,11 @@ const topStaffLineNoteFClef =
     NotePosition(tone: BaseTones.A, octave: 1, length: NoteLength.quarter);
 const bottomStaffLineNoteFClef =
     NotePosition(tone: BaseTones.G, octave: 0, length: NoteLength.quarter);
+
+const topStaffLineNoteCClef =
+    NotePosition(tone: BaseTones.G, octave: 2, length: NoteLength.quarter);
+const bottomStaffLineNoteCClef =
+    NotePosition(tone: BaseTones.F, octave: 1, length: NoteLength.quarter);
 
 const Map<Clefs, NotePosition> topStaffLineNote = {
   Clefs.G: topStaffLineNoteGClef,

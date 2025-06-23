@@ -8,7 +8,10 @@ class XCanvas implements Canvas {
   Offset _currentTranslation;
   final List<Offset> _translationStack;
   late Canvas _canvas;
-  XCanvas(Canvas canvas): _currentTranslation = const Offset(0,0), _translationStack = [const Offset(0,0)] {
+
+  XCanvas(Canvas canvas)
+      : _currentTranslation = const Offset(0, 0),
+        _translationStack = [const Offset(0, 0)] {
     _canvas = canvas;
   }
 
@@ -48,18 +51,22 @@ class XCanvas implements Canvas {
   }
 
   @override
-  void clipRect(Rect rect, {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
+  void clipRect(Rect rect,
+      {ClipOp clipOp = ClipOp.intersect, bool doAntiAlias = true}) {
     _canvas.clipRect(rect, clipOp: clipOp, doAntiAlias: doAntiAlias);
   }
 
   @override
-  void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter, Paint paint) {
+  void drawArc(Rect rect, double startAngle, double sweepAngle, bool useCenter,
+      Paint paint) {
     _canvas.drawArc(rect, startAngle, sweepAngle, useCenter, paint);
   }
 
   @override
-  void drawAtlas(Image atlas, List<RSTransform> transforms, List<Rect> rects, List<Color>? colors, BlendMode? blendMode, Rect? cullRect, Paint paint) {
-    _canvas.drawAtlas(atlas, transforms, rects, colors, blendMode, cullRect, paint);
+  void drawAtlas(Image atlas, List<RSTransform> transforms, List<Rect> rects,
+      List<Color>? colors, BlendMode? blendMode, Rect? cullRect, Paint paint) {
+    _canvas.drawAtlas(
+        atlas, transforms, rects, colors, blendMode, cullRect, paint);
   }
 
   @override
@@ -133,8 +140,10 @@ class XCanvas implements Canvas {
   }
 
   @override
-  void drawRawAtlas(Image atlas, Float32List rstTransforms, Float32List rects, Int32List? colors, BlendMode? blendMode, Rect? cullRect, Paint paint) {
-    _canvas.drawRawAtlas(atlas, rstTransforms, rects, colors, blendMode, cullRect, paint);
+  void drawRawAtlas(Image atlas, Float32List rstTransforms, Float32List rects,
+      Int32List? colors, BlendMode? blendMode, Rect? cullRect, Paint paint) {
+    _canvas.drawRawAtlas(
+        atlas, rstTransforms, rects, colors, blendMode, cullRect, paint);
   }
 
   @override
@@ -148,7 +157,8 @@ class XCanvas implements Canvas {
   }
 
   @override
-  void drawShadow(Path path, Color color, double elevation, bool transparentOccluder) {
+  void drawShadow(
+      Path path, Color color, double elevation, bool transparentOccluder) {
     _canvas.drawShadow(path, color, elevation, transparentOccluder);
   }
 
@@ -165,7 +175,7 @@ class XCanvas implements Canvas {
   @override
   void restore() {
     _canvas.restore();
-    if(_translationStack.length > 1) {
+    if (_translationStack.length > 1) {
       _currentTranslation = _translationStack.removeLast();
     }
   }
@@ -219,5 +229,16 @@ class XCanvas implements Canvas {
   @override
   void restoreToCount(int count) {
     _canvas.restoreToCount(count);
+  }
+
+  @override
+  void clipRSuperellipse(RSuperellipse rsuperellipse,
+      {bool doAntiAlias = true}) {
+    // TODO: implement clipRSuperellipse
+  }
+
+  @override
+  void drawRSuperellipse(RSuperellipse rsuperellipse, Paint paint) {
+    // TODO: implement drawRSuperellipse
   }
 }

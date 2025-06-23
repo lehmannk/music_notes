@@ -15,7 +15,8 @@ import 'package:xml/xml.dart';
 
 void main() {
   test('musicXML parser', () {
-    final XmlDocument document = loadMusicXMLFile('./hanon-no1-stripped.musicxml');
+    final XmlDocument document =
+        loadMusicXMLFile('./hanon-no1-stripped.musicxml');
     final Score score = parseMusicXML(document);
 
     expect(score.parts, hasLength(equals(1)));
@@ -25,7 +26,8 @@ void main() {
     expect(firstPart.measures, hasLength(equals(3)));
 
     final Measure firstMeasure = firstPart.measures.first;
-    final Attributes attributes = firstMeasure.contents.whereType<Attributes>().first;
+    final Attributes attributes =
+        firstMeasure.contents.whereType<Attributes>().first;
 
     expect(attributes.staves, equals(2));
     expect(attributes.time!.beats, equals(2));
@@ -35,23 +37,22 @@ void main() {
     final Score score = Score([
       Part([
         Measure([
-          Attributes(
-              1,
-              MusicalKey(CircleOfFifths.C_A.v, KeyMode.major),
-              1,
-              [Clef(1, Clefs.G)],
-              Time(4, 4)
-          ),
-          PitchNote(1, 1, 1, [], Pitch(BaseTones.C, 2), NoteLength.quarter, StemValue.up, []),
-          PitchNote(1, 1, 1, [], Pitch(BaseTones.D, 2), NoteLength.quarter, StemValue.up, []),
-          PitchNote(1, 1, 1, [], Pitch(BaseTones.E, 2), NoteLength.quarter, StemValue.up, []),
-          PitchNote(1, 1, 1, [], Pitch(BaseTones.F, 2), NoteLength.quarter, StemValue.up, []),
+          Attributes(1, MusicalKey(CircleOfFifths.C_A.v, KeyMode.major), 1,
+              [Clef(1, Clefs.G)], Time(4, 4)),
+          PitchNote(1, 1, 1, [], Pitch(BaseTones.C, 2), NoteLength.quarter,
+              StemValue.up, []),
+          PitchNote(1, 1, 1, [], Pitch(BaseTones.D, 2), NoteLength.quarter,
+              StemValue.up, []),
+          PitchNote(1, 1, 1, [], Pitch(BaseTones.E, 2), NoteLength.quarter,
+              StemValue.up, []),
+          PitchNote(1, 1, 1, [], Pitch(BaseTones.F, 2), NoteLength.quarter,
+              StemValue.up, []),
         ])
       ])
     ]);
 
     final builder = GoldenBuilder.column()
-        ..addScenario(
+      ..addScenario(
           'demo',
           SizedBox(
               width: 500,
@@ -62,11 +63,10 @@ void main() {
                   36,
                   1,
                 ),
-              )
-          )
-        );
+              )));
 
-    await tester.pumpWidgetBuilder(builder.build(), surfaceSize: const Size(500, 300));
+    await tester.pumpWidgetBuilder(builder.build(),
+        surfaceSize: const Size(500, 300));
 
     await screenMatchesGolden(tester, 'main_demo');
   });

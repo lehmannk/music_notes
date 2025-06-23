@@ -43,10 +43,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
-
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -58,7 +56,7 @@ class MyHomePageState extends State<MyHomePage> {
             child: FutureBuilder<Score>(
                 future: loadXML(),
                 builder: (context, snapshot) {
-                  if(snapshot.hasData) {
+                  if (snapshot.hasData) {
                     return MusicLine(
                       options: MusicLineOptions(
                         snapshot.data!,
@@ -66,18 +64,16 @@ class MyHomePageState extends State<MyHomePage> {
                         1,
                       ),
                     );
-                  } else if(snapshot.hasError) {
+                  } else if (snapshot.hasError) {
                     return Text('Oh, this failed!\n${snapshot.error}');
                   } else {
-                    return  const SizedBox(
+                    return const SizedBox(
                       width: 60,
                       height: 60,
                       child: CircularProgressIndicator(),
                     );
                   }
-                }
-            )
-        ),
+                })),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }

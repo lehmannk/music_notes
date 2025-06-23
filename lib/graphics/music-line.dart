@@ -12,7 +12,8 @@ import '../../ExtendedCanvas.dart';
 import 'package:collection/collection.dart';
 
 class MusicLineOptions {
-  MusicLineOptions(this.score, this.staffHeight, double topMarginFactor): topMargin = staffHeight * topMarginFactor;
+  MusicLineOptions(this.score, this.staffHeight, double topMarginFactor)
+      : topMargin = staffHeight * topMarginFactor;
 
   final Score score;
   final double staffHeight;
@@ -59,15 +60,13 @@ class _MusicLineState extends State<MusicLine> {
           Positioned(
             child: CustomPaint(
               size: Size(newWidth, newHeight),
-              painter: BackgroundPainter(
-                  widget.options, staffsSpacing),
+              painter: BackgroundPainter(widget.options, staffsSpacing),
             ),
           ),
           Positioned(
             child: CustomPaint(
               size: Size(newWidth, newHeight),
-              painter: ForegroundPainter(
-                  widget.options, staffsSpacing),
+              painter: ForegroundPainter(widget.options, staffsSpacing),
             ),
           ),
         ],
@@ -95,13 +94,14 @@ class BackgroundPainter extends CustomPainter {
 
     xCanvas.translate(0, options.topMargin);
 
-    final drawC = DrawingContext(options.score, options.staffHeight, options.topMargin, xCanvas, size, staffsSpacing);
+    final drawC = DrawingContext(options.score, options.staffHeight,
+        options.topMargin, xCanvas, size, staffsSpacing);
 
     if ((drawC.latestAttributes.staves ?? 1) > 1) {
       paintGlyph(
-        drawC.copyWith(staffHeight: options.staffHeight * 2 + staffsSpacing),
-        Glyph.brace, yOffset: (options.staffHeight * 2 + staffsSpacing) / 2
-      );
+          drawC.copyWith(staffHeight: options.staffHeight * 2 + staffsSpacing),
+          Glyph.brace,
+          yOffset: (options.staffHeight * 2 + staffsSpacing) / 2);
       xCanvas.translate(lineSpacing * ENGRAVING_DEFAULTS.barlineSeparation, 0);
     }
 
@@ -120,7 +120,8 @@ class BackgroundPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(BackgroundPainter oldDelegate) {
-    return options != oldDelegate.options || staffsSpacing != oldDelegate.staffsSpacing;
+    return options != oldDelegate.options ||
+        staffsSpacing != oldDelegate.staffsSpacing;
   }
 }
 
@@ -140,7 +141,8 @@ class ForegroundPainter extends CustomPainter {
     final paint = Paint()..color = Colors.blue;
     paint.strokeWidth = lineSpacing * ENGRAVING_DEFAULTS.staffLineThickness;
 
-    final drawC = DrawingContext(options.score, options.staffHeight, options.topMargin, xCanvas, size, staffsSpacing);
+    final drawC = DrawingContext(options.score, options.staffHeight,
+        options.topMargin, xCanvas, size, staffsSpacing);
 
     if ((drawC.latestAttributes.staves ?? 1) > 1) {
       // The brace in front of the whole music line takes up horizontal space. That
@@ -156,7 +158,7 @@ class ForegroundPainter extends CustomPainter {
     final measures = options.score.parts.first.measures.toList();
     measures.forEachIndexed((index, measure) {
       drawC.currentMeasure = index;
-      if(index > 0) {
+      if (index > 0) {
         drawC.canvas.translate(drawC.lS * 1, 0);
       }
       paintMeasure(measure, drawC);
@@ -169,6 +171,7 @@ class ForegroundPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(ForegroundPainter oldDelegate) {
-    return options != oldDelegate.options || staffsSpacing != oldDelegate.staffsSpacing;
+    return options != oldDelegate.options ||
+        staffsSpacing != oldDelegate.staffsSpacing;
   }
 }

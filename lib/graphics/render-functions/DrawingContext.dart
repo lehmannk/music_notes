@@ -7,16 +7,17 @@ import '../../ExtendedCanvas.dart';
 import '../../musicXML/data.dart';
 
 class DrawingContext extends MusicLineOptions {
-
   DrawingContext(
-      super.score,
-      super.staffHeight,
-      super.topMargin,
-      this.canvas,
-      this.size,
-      this.staffsSpacing,
-      ) : _currentAttributes = score.parts.first.measures.first.attributes!,
-        measuresPerPart = List.filled(score.parts.length, List.empty(growable: true), growable: false);
+    super.score,
+    super.staffHeight,
+    super.topMargin,
+    this.canvas,
+    this.size,
+    this.staffsSpacing,
+  )   : _currentAttributes = score.parts.first.measures.first.attributes!,
+        measuresPerPart = List.filled(
+            score.parts.length, List.empty(growable: true),
+            growable: false);
 
   final XCanvas canvas;
   final Size size;
@@ -27,11 +28,14 @@ class DrawingContext extends MusicLineOptions {
   int get currentMeasure => _currentMeasure;
   set currentMeasure(int newMeasure) {
     _currentMeasure = newMeasure;
-    final newMeasureAttributes = score.parts[currentPart].measures.elementAt(newMeasure).attributes;
-    if(newMeasureAttributes != null) {
-      _currentAttributes = _currentAttributes.copyWithObject(newMeasureAttributes);
+    final newMeasureAttributes =
+        score.parts[currentPart].measures.elementAt(newMeasure).attributes;
+    if (newMeasureAttributes != null) {
+      _currentAttributes =
+          _currentAttributes.copyWithObject(newMeasureAttributes);
     }
   }
+
   Attributes _currentAttributes;
   Attributes get latestAttributes => _currentAttributes;
   Map<int, Map<int, List<BeamPoint>>> currentBeamPointsPerID = {};
@@ -43,7 +47,13 @@ class DrawingContext extends MusicLineOptions {
     });
   }
 
-  DrawingContext copyWith({Score? score, double? staffHeight, double? topMargin, XCanvas? canvas, Size? size, double? staffsSpacing}) {
+  DrawingContext copyWith(
+      {Score? score,
+      double? staffHeight,
+      double? topMargin,
+      XCanvas? canvas,
+      Size? size,
+      double? staffsSpacing}) {
     return DrawingContext(
       score ?? this.score,
       staffHeight ?? this.staffHeight,

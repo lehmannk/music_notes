@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
-  xml: ^5.4.1
+  xml: ^6.5.0
   collection: ^1.17.0
   golden_toolkit: ^0.15.0
   uuid: ^3.0.7
