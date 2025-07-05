@@ -29,17 +29,7 @@ paintStaffLines(DrawingContext drawC, bool noAdvance) {
   }
 }
 
-enum BarLineTypes {
-  regular,
-  lightLight,
-  heavyHeavy,
-  heavyLight,
-  lightHeavy,
-  heavy,
-  dashed,
-  repeatRight,
-  repeatLeft
-}
+enum BarLineTypes { regular, lightLight, heavyHeavy, heavyLight, lightHeavy, heavy, dashed, repeatRight, repeatLeft }
 
 /// Does translate to after its width
 paintBarLine(DrawingContext drawC, Barline barline, bool noAdvance) {
@@ -49,11 +39,7 @@ paintBarLine(DrawingContext drawC, Barline barline, bool noAdvance) {
   final staves = drawC.latestAttributes.staves!;
 
   const startOffset = Offset(0, 0);
-  final endOffset = Offset(
-      0,
-      staves > 1
-          ? drawC.staffHeight * 2 + drawC.staffsSpacing
-          : drawC.staffHeight);
+  final endOffset = Offset(0, staves > 1 ? drawC.staffHeight * 2 + drawC.staffsSpacing : drawC.staffHeight);
 
   if (noAdvance) {
     drawC.canvas.save();
@@ -66,15 +52,13 @@ paintBarLine(DrawingContext drawC, Barline barline, bool noAdvance) {
   } else if (barline.barStyle == BarLineTypes.lightLight) {
     paint.strokeWidth = thinBarlineWidh;
     drawC.canvas.drawLine(startOffset, endOffset, paint);
-    drawC.canvas.translate(
-        lS * ENGRAVING_DEFAULTS.barlineSeparation + thinBarlineWidh, 0);
+    drawC.canvas.translate(lS * ENGRAVING_DEFAULTS.barlineSeparation + thinBarlineWidh, 0);
     drawC.canvas.drawLine(startOffset, endOffset, paint);
     drawC.canvas.translate(thinBarlineWidh, 0);
   } else if (barline.barStyle == BarLineTypes.lightHeavy) {
     paint.strokeWidth = thinBarlineWidh;
     drawC.canvas.drawLine(startOffset, endOffset, paint);
-    drawC.canvas.translate(
-        lS * ENGRAVING_DEFAULTS.barlineSeparation + thinBarlineWidh, 0);
+    drawC.canvas.translate(lS * ENGRAVING_DEFAULTS.barlineSeparation + thinBarlineWidh, 0);
     paint.strokeWidth = lS * ENGRAVING_DEFAULTS.thickBarlineThickness;
     drawC.canvas.drawLine(startOffset, endOffset, paint);
     drawC.canvas.translate(lS * ENGRAVING_DEFAULTS.thickBarlineThickness, 0);
@@ -84,20 +68,16 @@ paintBarLine(DrawingContext drawC, Barline barline, bool noAdvance) {
     drawC.canvas.translate(lS * ENGRAVING_DEFAULTS.barlineSeparation, 0);
     paint.strokeWidth = thinBarlineWidh;
     drawC.canvas.drawLine(startOffset, endOffset, paint);
-    drawC.canvas
-        .translate(lS * ENGRAVING_DEFAULTS.repeatBarlineDotSeparation, 0);
+    drawC.canvas.translate(lS * ENGRAVING_DEFAULTS.repeatBarlineDotSeparation, 0);
     paintGlyph(drawC, Glyph.repeatDots);
     drawC.canvas.translate(lS * GLYPH_ADVANCE_WIDTHS[Glyph.repeatDots]!, 0);
   } else if (barline.barStyle == BarLineTypes.repeatLeft) {
     paintGlyph(drawC, Glyph.repeatDots);
     drawC.canvas.translate(
-        lS * GLYPH_ADVANCE_WIDTHS[Glyph.repeatDots]! +
-            lS * ENGRAVING_DEFAULTS.repeatBarlineDotSeparation,
-        0);
+        lS * GLYPH_ADVANCE_WIDTHS[Glyph.repeatDots]! + lS * ENGRAVING_DEFAULTS.repeatBarlineDotSeparation, 0);
     paint.strokeWidth = thinBarlineWidh;
     drawC.canvas.drawLine(startOffset, endOffset, paint);
-    drawC.canvas.translate(
-        thinBarlineWidh + lS * ENGRAVING_DEFAULTS.barlineSeparation, 0);
+    drawC.canvas.translate(thinBarlineWidh + lS * ENGRAVING_DEFAULTS.barlineSeparation, 0);
     paint.strokeWidth = lS * ENGRAVING_DEFAULTS.thickBarlineThickness;
     drawC.canvas.drawLine(startOffset, endOffset, paint);
     drawC.canvas.translate(lS * ENGRAVING_DEFAULTS.thickBarlineThickness, 0);
@@ -116,9 +96,7 @@ calculateBarlineWidth(DrawingContext drawC, Barline barline) {
   if (barline.barStyle == BarLineTypes.regular) {
     width = thinBarlineWidh;
   } else if (barline.barStyle == BarLineTypes.lightLight) {
-    width = lS * ENGRAVING_DEFAULTS.barlineSeparation +
-        thinBarlineWidh +
-        thinBarlineWidh;
+    width = lS * ENGRAVING_DEFAULTS.barlineSeparation + thinBarlineWidh + thinBarlineWidh;
   } else if (barline.barStyle == BarLineTypes.heavyHeavy) {
     width = lS * ENGRAVING_DEFAULTS.thinThickBarlineSeparation +
         thinBarlineWidh +
@@ -141,8 +119,7 @@ calculateBarlineWidth(DrawingContext drawC, Barline barline) {
 }
 
 /// Returns true if something was actually drawn
-Rect? paintAccidentalsForTone(DrawingContext drawC, Clefs staff, Fifths tone,
-    {bool noAdvance = false}) {
+Rect? paintAccidentalsForTone(DrawingContext drawC, Clefs staff, Fifths tone, {bool noAdvance = false}) {
   if (noAdvance) {
     drawC.canvas.save();
   }
@@ -150,16 +127,19 @@ Rect? paintAccidentalsForTone(DrawingContext drawC, Clefs staff, Fifths tone,
   Rect? boundingBox;
 
   double lineSpacing = drawC.lS;
-  final accidentals = staff == Clefs.F
-      ? mainToneAccidentalsMapForFClef[tone]!
-      : mainToneAccidentalsMapForGClef[tone]!;
+  var accidentals = mainToneAccidentalsMapForGClef[tone]!;
+  if (staff == Clefs.F) {
+    accidentals = mainToneAccidentalsMapForFClef[tone]!;
+  } else if (staff == Clefs.C) {
+    accidentals = mainToneAccidentalsMapForCClef[tone]!;
+  }
+
   for (var note in accidentals) {
     if (note.accidental != Accidentals.none) {
       final glyphBB = paintGlyph(
         drawC,
         accidentalGlyphMap[note.accidental]!,
-        yOffset: (lineSpacing / 2) *
-            calculateYOffsetForNote(staff, note.positionalValue),
+        yOffset: (lineSpacing / 2) * calculateYOffsetForNote(staff, note.positionalValue),
       );
       if (boundingBox == null) {
         boundingBox = glyphBB.boundingBox;
@@ -187,28 +167,17 @@ double calculateAccidentalsForToneWidth(DrawingContext drawC, Fifths tone) {
   return width;
 }
 
-Rect paintTimeSignature(DrawingContext drawC, Attributes attributes,
-    {bool noAdvance = false}) {
-  Rect timeBB = paintGlyph(
-          drawC,
-          GLYPHRANGE_MAP[GlyphRange.timeSignatures]!
-              .glyphs[attributes.time!.beats],
-          yOffset: -drawC.lS,
-          noAdvance: true)
+Rect paintTimeSignature(DrawingContext drawC, Attributes attributes, {bool noAdvance = false}) {
+  Rect timeBB = paintGlyph(drawC, GLYPHRANGE_MAP[GlyphRange.timeSignatures]!.glyphs[attributes.time!.beats],
+          yOffset: -drawC.lS, noAdvance: true)
       .boundingBox;
   timeBB = timeBB.expandToInclude(paintGlyph(
-          drawC,
-          GLYPHRANGE_MAP[GlyphRange.timeSignatures]!
-              .glyphs[attributes.time!.beatType],
-          yOffset: drawC.lS,
-          noAdvance: noAdvance)
+          drawC, GLYPHRANGE_MAP[GlyphRange.timeSignatures]!.glyphs[attributes.time!.beatType],
+          yOffset: drawC.lS, noAdvance: noAdvance)
       .boundingBox);
   return timeBB;
 }
 
 calculateTimeSignatureWidth(DrawingContext drawC, Attributes attributes) {
-  return calculateGlyphWidth(
-      drawC,
-      GLYPHRANGE_MAP[GlyphRange.timeSignatures]!
-          .glyphs[attributes.time!.beatType]);
+  return calculateGlyphWidth(drawC, GLYPHRANGE_MAP[GlyphRange.timeSignatures]!.glyphs[attributes.time!.beatType]);
 }
