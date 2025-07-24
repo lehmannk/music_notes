@@ -5,19 +5,25 @@ import '../graphics/render-functions/staff.dart';
 
 class Score {
   Score(this.parts);
+
   final List<Part> parts;
+
   get isEmpty => parts.isEmpty || parts.first.isEmpty;
 }
 
 class Part {
   Part(this.measures);
+
   final List<Measure> measures;
+
   get isEmpty => measures.isEmpty;
 }
 
 class Measure {
   Measure(this.contents);
+
   final List<MeasureContent> contents;
+
   Attributes? get attributes {
     final attributes = contents.whereType<Attributes>();
     return attributes.isNotEmpty ? attributes.first : null;
@@ -33,11 +39,13 @@ class MeasureContent {}
 
 class Barline extends MeasureContent {
   Barline(this.barStyle);
+
   final BarLineTypes barStyle;
 }
 
 class Direction extends MeasureContent {
   Direction(this.type, this.staff, [this.placement]);
+
   final DirectionType type;
   final int staff;
   final PlacementValue? placement;
@@ -47,6 +55,7 @@ class DirectionType {}
 
 class OctaveShift extends DirectionType {
   OctaveShift(this.number, this.type, [this.size]);
+
   final int number;
   final UpDownStopCont type;
   final int? size;
@@ -56,6 +65,7 @@ enum UpDownStopCont { up, down, stop, continued }
 
 class Wedge extends DirectionType {
   Wedge(this.number, this.type);
+
   final int number;
   final WedgeType type;
 }
@@ -63,8 +73,8 @@ class Wedge extends DirectionType {
 enum WedgeType { crescendo, diminuendo, stop, continued }
 
 class Words extends DirectionType {
-  Words(this.content,
-      {this.fontFamily, this.fontSize, this.fontStyle, this.fontWeight});
+  Words(this.content, {this.fontFamily, this.fontSize, this.fontStyle, this.fontWeight});
+
   final String content;
   final String? fontFamily;
   final double? fontSize;
@@ -83,6 +93,7 @@ enum NoteLength { whole, half, quarter, eighth, sixteenth, thirtysecond }
 
 class Attributes extends MeasureContent {
   Attributes([this.divisions, this.key, this.staves, this.clefs, this.time]);
+
   final int? divisions;
   final MusicalKey? key;
   final int? staves;
@@ -90,19 +101,9 @@ class Attributes extends MeasureContent {
   final Time? time;
 
   bool get isValidForFirstMeasure =>
-      divisions != null &&
-      key != null &&
-      staves != null &&
-      clefs != null &&
-      clefs!.isNotEmpty &&
-      time != null;
+      divisions != null && key != null && staves != null && clefs != null && clefs!.isNotEmpty && time != null;
 
-  Attributes copyWithParams(
-      {int? divisions,
-      MusicalKey? key,
-      int? staves,
-      List<Clef>? clefs,
-      Time? time}) {
+  Attributes copyWithParams({int? divisions, MusicalKey? key, int? staves, List<Clef>? clefs, Time? time}) {
     return Attributes(
       divisions ?? this.divisions,
       key ?? this.key,
@@ -125,6 +126,7 @@ class Attributes extends MeasureContent {
 
 class Time {
   Time(this.beats, this.beatType, {this.draw = true});
+
   final int beats;
   final int beatType;
   final bool draw;
@@ -132,22 +134,12 @@ class Time {
 
 class Clef {
   Clef(this.staffNumber, this.sign);
+
   final int staffNumber;
   final Clefs sign;
 }
 
-enum KeyMode {
-  none,
-  major,
-  minor,
-  dorian,
-  phrygian,
-  lydian,
-  mixolydian,
-  aeolian,
-  ionian,
-  locrian
-}
+enum KeyMode { none, major, minor, dorian, phrygian, lydian, mixolydian, aeolian, ionian, locrian }
 
 typedef Fifths = int;
 
@@ -191,12 +183,14 @@ extension CircleOfFifthsValues on CircleOfFifths {
 
 class MusicalKey {
   MusicalKey(this.fifths, this.mode);
+
   final Fifths fifths;
   final KeyMode? mode;
 }
 
 abstract class Note extends MeasureContent {
   Note(this.duration, this.voice, this.staff, this.notations);
+
   final int duration;
   final int voice;
   int staff;
@@ -219,9 +213,9 @@ class RestNote extends Note {
 }
 
 class PitchNote extends Note {
-  PitchNote(super.duration, super.voice, super.staff, super.notations,
-      this.pitch, this.type, this.stem, this.beams,
+  PitchNote(super.duration, super.voice, super.staff, super.notations, this.pitch, this.type, this.stem, this.beams,
       {this.dots = 0, this.chord = false, this.color = Colors.black});
+
   final NoteLength type;
   final List<Beam> beams;
   final int dots;
@@ -240,8 +234,7 @@ class PitchNote extends Note {
 }
 
 abstract class Notation {
-  Notation([PlacementValue? placementValue])
-      : placement = placementValue ?? PlacementValue.below;
+  Notation([PlacementValue? placementValue]) : placement = placementValue ?? PlacementValue.below;
   final PlacementValue placement;
 }
 
@@ -314,6 +307,7 @@ enum PlacementValue { above, below }
 
 class Beam {
   Beam(this.id, this.number, this.value);
+
   final int id;
   final int number;
   final BeamValue value;
@@ -326,23 +320,21 @@ class Beam {
 
 class Pitch {
   Pitch(this.step, this.octave, [this.alter]);
+
   final BaseTones step;
   final int octave;
-  final int? alter;
+  int? alter;
 
-  Accidentals get accidental => alter == null || alter == 0
-      ? Accidentals.none
-      : (alter == -1
-          ? Accidentals.flat
-          : (alter == 1 ? Accidentals.sharp : Accidentals.none));
+  Accidentals get accidental {
+    if (alter == null) return Accidentals.none;
+    if (alter == 0) return Accidentals.natural;
+    return alter! < 0 ? Accidentals.flat : Accidentals.sharp;
+  }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is Pitch &&
-        step == other.step &&
-        octave == other.octave &&
-        alter == other.alter;
+    return other is Pitch && step == other.step && octave == other.octave && alter == other.alter;
   }
 
   @override
@@ -351,10 +343,12 @@ class Pitch {
 
 class Backup extends MeasureContent {
   Backup(this.duration);
+
   final int duration;
 }
 
 class Forward extends MeasureContent {
   Forward(this.duration);
+
   final int duration;
 }
