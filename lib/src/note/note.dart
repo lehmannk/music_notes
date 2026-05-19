@@ -575,7 +575,7 @@ final class GermanNoteNotation extends NoteNotation {
     Note(noteName: .a || .e, :final accidental) && Note(:final noteName)
         when accidental.isFlat =>
       noteNameNotation.format(noteName) +
-          accidentalNotation.format(accidental).substring(1),
+          accidentalNotation.format(accidental),
 
     Note(:final noteName, :final accidental) =>
       noteNameNotation.format(noteName) + accidentalNotation.format(accidental),
