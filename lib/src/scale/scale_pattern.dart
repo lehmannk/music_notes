@@ -393,10 +393,11 @@ final class ScalePattern {
   @override
   String toString() {
     final descendingSteps = _descendingIntervalSteps != null
-        ? ', ${_descendingIntervalSteps.join(' ')}'
+        ? ', ${_descendingIntervalSteps.map((i) => i.format()).join(' ')}'
         : '';
 
-    return '$name (${_intervalSteps.join(' ')}$descendingSteps)';
+    return '$name (${_intervalSteps.map((i) => i.format()).join(' ')}'
+        '$descendingSteps)';
   }
 
   @override
@@ -441,8 +442,8 @@ extension _BinarySequence on int {
   ///
   /// Example:
   /// ```dart
-  /// 1010.b.setBit(0) == 1011.b // 11
-  /// 1010.b.setBit(2) == 1110.b // 14
+  /// 1010.b.setBitAt(0) == 1011.b // 11
+  /// 1010.b.setBitAt(2) == 1110.b // 14
   /// ```
   int setBitAt(int index) => this | (1 << index);
 }
